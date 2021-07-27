@@ -1,0 +1,54 @@
+<template>
+  <div class="menu-list">
+        <a-menu  class="menu-item"
+      :default-selected-keys="[defaultSelectKey]"
+      :default-open-keys="[defaultOpenKey]"
+      mode="inline"
+      theme="dark"
+      :inline-collapsed="$store.state.collapsed"
+    >
+    <template v-for="item in $store.state.menuRoutes">
+      <a-sub-menu :key="item.name" v-if="!item.meta.hidden">
+        <span slot="title" >
+            <a-icon :type="item.meta.icon" />
+        <span>{{ item.meta.title }} </span>
+    </span>
+<template v-for="child in item.children">
+        <a-menu-item v-if="!child.meta.hidden" :key="child.name">
+            <router-link :to="{name:child.name}">
+                <a-icon :type="child.meta.icon" />
+                 {{ child.meta.title }} </router-link>
+        </a-menu-item>
+        </template>
+
+      </a-sub-menu>
+      </template>
+    </a-menu>
+</div>
+</template>
+<script>
+export default {
+  computed: {
+    defaultSelectKey: {
+      get() {
+        return this.$router.currentRoute.matched[1] ? this.$router.currentRoute.matched[1].name : '';
+      },
+    },
+    defaultOpenKey: {
+      get() {
+        return this.$router.currentRoute.matched[0].name;
+      },
+    },
+  },
+};
+</script>
+<style lang="less" scoped>
+.menu-list{
+        width: 180px;
+        position: fixed;
+        height: 100%;
+        .menu-item{
+            height: 100%;
+        }
+    }
+</style>
